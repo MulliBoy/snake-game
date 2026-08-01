@@ -115,7 +115,9 @@ function initApples() {
 
 
 function animateSnake(){
-    c.clearRect(0, 0, canvas.width, canvas.height)
+    simulateKeyboardInputs();
+    
+    c.clearRect(0, 0, canvas.width, canvas.height);
 
     drawBoard();
     moveSnake();
@@ -376,3 +378,64 @@ function drawMirrorSnake() {
         c.fillRect(yYSnake[i].x, yYSnake[i].y, size, size); 
     }
 };
+
+// ============================================================================
+// NINTENDO SWITCH BLUETOOTH GAMEPAD SIMULATOR
+// ============================================================================
+let gamepadIndex = null;
+let buttonCooldowns = {}; 
+
+window.addEventListener("gamepadconnected", (e) => {
+  console.log("Switch Controller Connected:", e.gamepad.id);
+  gamepadIndex = e.gamepad.index;
+});
+
+window.addEventListener("gamepaddisconnected", () => {
+  gamepadIndex = null;
+});
+
+function triggerKeyPress(keyName) {
+  const event = new KeyboardEvent("keydown", {
+    key: keyName,
+    bubbles: true,
+    cancelable: true
+  });
+  window.dispatchEvent(event); 
+}
+
+function handleSingleButtonPress(buttonIndex, simulatedKey) {
+  if (gamepadIndex === null) return;
+  const gamepads = navigator.getGamepads();
+  const gp = gamepads[gamepadIndex];
+  if (!gp || !gp.buttons[buttonIndex]) return;
+
+  if (gp.buttons[buttonIndex].pressed) {
+    if (!buttonCooldowns[buttonIndex]) {
+      triggerKeyPress(simulatedKey);
+      buttonCooldowns[buttonIndex] = true;
+      setTimeout(() => { buttonCooldowns[buttonIndex] = false; }, 300); 
+    }
+  }
+}
+
+function simulateKeyboardInputs() {
+  if (gamepadIndex === null) return;
+  const gamepads = navigator.getGamepads();
+  const gp = gamepads[gamepadIndex];
+  if (!gp) return;
+
+  // 1. D-Pad Mapping (Directions)
+  if (gp.buttons[14] && gp.buttons[14].pressed) triggerKeyPress("ArrowLeft");
+  if (gp.buttons[12] && gp.buttons[12].pressed) triggerKeyPress("ArrowUp");
+  if (gp.buttons[15] && gp.buttons[15].pressed) triggerKeyPress("ArrowRight");
+  if (gp.buttons[13] && gp.buttons[13].pressed) triggerKeyPress("ArrowDown");
+
+  // 2. Button Mapping (1, 2, 3, 4, 5, 6 Keys)
+  handleSingleButtonPress(0, "1"); // Switch 'B' Button
+  handleSingleButtonPress(1, "2"); // Switch 'A' Button
+  handleSingleButtonPress(2, "3"); // Switch 'Y' Button
+  handleSingleButtonPress(3, "4"); // Switch 'X' Button
+  handleSingleButtonPress(4, "5"); // Left Bumper (L)
+  handleSingleButtonPress(5, "6"); // Right Bumper (R)
+}
+
