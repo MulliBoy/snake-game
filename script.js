@@ -1,12 +1,14 @@
+// Move these two lines to the very top of your file
+let gamepadIndex = null;
+let buttonCooldowns = {}; 
+
 //setup the canvas
 var canvas = document.getElementById("mycanvas");
 canvas.width = 400;
 canvas.height = 400;
 var c = canvas.getContext("2d");
 
-// Move these two lines to the very top of your file
-let gamepadIndex = null;
-let buttonCooldowns = {}; 
+
 const size = 20;
 var sx = 0;
 var sy = 0;
@@ -115,59 +117,6 @@ function initApples() {
         });
     }
 }
-
-
-function animateSnake(){
-    simulateKeyboardInputs();
-    
-    c.clearRect(0, 0, canvas.width, canvas.height);
-
-    drawBoard();
-    moveSnake();
-    drawSnake();
-    yinYangSnake();
-    drawMirrorSnake();
-    eatFood();
-    eatTeleporter();
-    eatPoison();
-    eatLives();
-    eatKey();
-    addText();
-
-    if(parts <= 0){
-        parts = 1;
-    }
-
-    if(touchingEdge() && hardmode == true){
-        lives += -1;
-        if(score <= -1){
-            score = 0;
-        };
-        if(lives <= -1){
-            drawTextGameOver("You lost!");
-            return
-        } else {
-            resetSnakePosition();
-        };
-    };
-    if(touchingSelf() || score <= -1){
-        lives += -1;
-        if(score <= -1){
-            score = 0;
-        };
-        if(lives <= -1){
-            drawTextGameOver("You lost!");
-            return
-        } else {
-            resetSnakePosition();
-        };
-    };
-
-    request(animateSnake)
-};
-
-animateSnake();
-initApples();
 
 //move snake well
 document.addEventListener("keydown", handleKey);
@@ -440,3 +389,55 @@ function simulateKeyboardInputs() {
   handleSingleButtonPress(4, "5"); // Left Bumper (L)
   handleSingleButtonPress(5, "6"); // Right Bumper (R)
 }
+
+function animateSnake(){
+    simulateKeyboardInputs();
+    
+    c.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawBoard();
+    moveSnake();
+    drawSnake();
+    yinYangSnake();
+    drawMirrorSnake();
+    eatFood();
+    eatTeleporter();
+    eatPoison();
+    eatLives();
+    eatKey();
+    addText();
+
+    if(parts <= 0){
+        parts = 1;
+    }
+
+    if(touchingEdge() && hardmode == true){
+        lives += -1;
+        if(score <= -1){
+            score = 0;
+        };
+        if(lives <= -1){
+            drawTextGameOver("You lost!");
+            return
+        } else {
+            resetSnakePosition();
+        };
+    };
+    if(touchingSelf() || score <= -1){
+        lives += -1;
+        if(score <= -1){
+            score = 0;
+        };
+        if(lives <= -1){
+            drawTextGameOver("You lost!");
+            return
+        } else {
+            resetSnakePosition();
+        };
+    };
+
+    request(animateSnake)
+};
+
+animateSnake();
+initApples();
