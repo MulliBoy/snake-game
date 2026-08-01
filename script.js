@@ -419,10 +419,14 @@ function handleSingleButtonPress(buttonIndex, simulatedKey) {
 }
 
 function simulateKeyboardInputs() {
+  // 1. Keep this: Stop if no gamepad index is tracked
   if (gamepadIndex === null) return;
+
   const gamepads = navigator.getGamepads();
   const gp = gamepads[gamepadIndex];
-  if (!gp) return;
+  
+  // 2. FIXED: Stop right here if the gamepad data isn't loaded yet!
+  if (!gp || !gp.buttons) return;
 
   // 1. D-Pad Mapping (Directions)
   if (gp.buttons[14] && gp.buttons[14].pressed) triggerKeyPress("ArrowLeft");
