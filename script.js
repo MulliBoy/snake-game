@@ -331,56 +331,82 @@ function drawMirrorSnake() {
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Map your HTML button IDs to standard KeyboardEvent properties
     const keyMap = {
-        "up":    { key: "ArrowUp",    code: "ArrowUp" },
-        "down":  { key: "ArrowDown",  code: "ArrowDown" },
-        "left":  { key: "ArrowLeft",  code: "ArrowLeft" },
-        "right": { key: "ArrowRight", code: "ArrowRight" },
-        "1":     { key: "1",          code: "Digit1" },
-        "2":     { key: "2",          code: "Digit2" },
-        "3":     { key: "3",          code: "Digit3" },
-        "4":     { key: "4",          code: "Digit4" },
-        "5":     { key: "5",          code: "Digit5" },
-        "6":     { key: "6",          code: "Digit6" }
+        "up":    { key: "ArrowUp",    code: "ArrowUp",    keyCode: 38 },
+        "down":  { key: "ArrowDown",  code: "ArrowDown",  keyCode: 40 },
+        "left":  { key: "ArrowLeft",  code: "ArrowLeft",  keyCode: 37 },
+        "right": { key: "ArrowRight", code: "ArrowRight", keyCode: 39 },
+        "1":     { key: "1",          code: "Digit1",     keyCode: 49 },
+        "2":     { key: "2",          code: "Digit2",     keyCode: 50 },
+        "3":     { key: "3",          code: "Digit3",     keyCode: 51 },
+        "4":     { key: "4",          code: "Digit4",     keyCode: 52 },
+        "5":     { key: "5",          code: "Digit5",     keyCode: 53 },
+        "6":     { key: "6",          code: "Digit6",     keyCode: 54 }
     };
 
-    // 2. Helper function to create and fire native keyboard events
+    // 2. Updated Helper function to target Flutter or bridge directly
     function dispatchFakeKeyEvent(eventType, keyData) {
+        // A. If Flutter has registered the direct Dart bridge, use it for zero-latency inputs
+        if (window.onMobileButtonAction) {
+            window.onMobileButtonAction(eventType, keyData.key);
+            return; 
+        }
+
+        // B. Fallback to standard web engine event routing if bridge isn't ready
         const event = new KeyboardEvent(eventType, {
             key: keyData.key,
             code: keyData.code,
+            keyCode: keyData.keyCode,
+            which: keyData.keyCode,
             bubbles: true,
             cancelable: true,
             view: window
         });
-        window.dispatchEvent(event);
+
+        const flutterTarget = document.querySelector('flutter-view') || 
+                              document.querySelector('canvas') || 
+                              document.body;
+
+        flutterTarget.dispatchEvent(event);
     }
 
-    // 3. Attach touch listeners to every matching button ID
+    // 3. Attach listeners for BOTH touch screens and mouse clicks
     Object.keys(keyMap).forEach(id => {
         const button = document.getElementById(id);
         if (!button) return;
 
         const keyData = keyMap[id];
 
-        // "touchstart" triggers instantly on mobile (avoids 300ms click delay)
+        // --- MOBILE TOUCH SUPPORT ---
         button.addEventListener("touchstart", (e) => {
-            e.preventDefault(); // Prevents zooming/double-tap quirks
+            e.preventDefault();
             dispatchFakeKeyEvent("keydown", keyData);
         }, { passive: false });
 
-        // "touchend" catches finger lifting off the button
         button.addEventListener("touchend", (e) => {
             e.preventDefault();
             dispatchFakeKeyEvent("keyup", keyData);
         }, { passive: false });
 
-        // "touchcancel" handles safety reset if an alert pops up or finger slips off screen
         button.addEventListener("touchcancel", (e) => {
             e.preventDefault();
             dispatchFakeKeyEvent("keyup", keyData);
         }, { passive: false });
+
+        // --- DESKTOP MOUSE SUPPORT ---
+        button.addEventListener("mousedown", (e) => {
+            dispatchFakeKeyEvent("keydown", keyData);
+        });
+
+        button.addEventListener("mouseup", (e) => {
+            dispatchFakeKeyEvent("keyup", keyData);
+        });
+
+        button.addEventListener("mouseleave", (e) => {
+            dispatchFakeKeyEvent("keyup", keyData);
+        });
     });
 });
+
 
 function animateSnake(){
     
