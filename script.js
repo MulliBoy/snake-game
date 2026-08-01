@@ -1,6 +1,3 @@
-// Move these two lines to the very top of your file
-let gamepadIndex = null;
-let buttonCooldowns = {}; 
 
 //setup the canvas
 var canvas = document.getElementById("mycanvas");
@@ -331,67 +328,61 @@ function drawMirrorSnake() {
     }
 };
 
-// ============================================================================
-// KEEP THIS CODE AT THE END OF YOUR FILE (Do not make it blank!)
-// ============================================================================
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Map your HTML button IDs to standard KeyboardEvent properties
+    const keyMap = {
+        "up":    { key: "ArrowUp",    code: "ArrowUp" },
+        "down":  { key: "ArrowDown",  code: "ArrowDown" },
+        "left":  { key: "ArrowLeft",  code: "ArrowLeft" },
+        "right": { key: "ArrowRight", code: "ArrowRight" },
+        "1":     { key: "1",          code: "Digit1" },
+        "2":     { key: "2",          code: "Digit2" },
+        "3":     { key: "3",          code: "Digit3" },
+        "4":     { key: "4",          code: "Digit4" },
+        "5":     { key: "5",          code: "Digit5" },
+        "6":     { key: "6",          code: "Digit6" }
+    };
 
-window.addEventListener("gamepadconnected", (e) => {
-  console.log("Switch Controller Connected:", e.gamepad.id);
-  gamepadIndex = e.gamepad.index; // Sets the index when controller wakes up
-});
-
-window.addEventListener("gamepaddisconnected", () => {
-  gamepadIndex = null; // Resets if controller disconnects
-});
-
-function triggerKeyPress(keyName) {
-  const event = new KeyboardEvent("keydown", {
-    key: keyName,
-    bubbles: true,
-    cancelable: true
-  });
-  window.dispatchEvent(event); 
-}
-
-function handleSingleButtonPress(buttonIndex, simulatedKey) {
-  if (gamepadIndex === null) return;
-  const gamepads = navigator.getGamepads();
-  const gp = gamepads[gamepadIndex];
-  if (!gp || !gp.buttons[buttonIndex]) return;
-
-  if (gp.buttons[buttonIndex].pressed) {
-    if (!buttonCooldowns[buttonIndex]) {
-      triggerKeyPress(simulatedKey);
-      buttonCooldowns[buttonIndex] = true;
-      setTimeout(() => { buttonCooldowns[buttonIndex] = false; }, 300); 
+    // 2. Helper function to create and fire native keyboard events
+    function dispatchFakeKeyEvent(eventType, keyData) {
+        const event = new KeyboardEvent(eventType, {
+            key: keyData.key,
+            code: keyData.code,
+            bubbles: true,
+            cancelable: true,
+            view: window
+        });
+        window.dispatchEvent(event);
     }
-  }
-}
 
-function simulateKeyboardInputs() {
-  if (gamepadIndex === null) return;
-  const gamepads = navigator.getGamepads();
-  const gp = gamepads[gamepadIndex];
-  
-  if (!gp || !gp.buttons) return;
+    // 3. Attach touch listeners to every matching button ID
+    Object.keys(keyMap).forEach(id => {
+        const button = document.getElementById(id);
+        if (!button) return;
 
-  // 1. D-Pad Mapping (Directions)
-  if (gp.buttons[14] && gp.buttons[14].pressed) triggerKeyPress("ArrowLeft");
-  if (gp.buttons[12] && gp.buttons[12].pressed) triggerKeyPress("ArrowUp");
-  if (gp.buttons[15] && gp.buttons[15].pressed) triggerKeyPress("ArrowRight");
-  if (gp.buttons[13] && gp.buttons[13].pressed) triggerKeyPress("ArrowDown");
+        const keyData = keyMap[id];
 
-  // 2. Button Mapping (1, 2, 3, 4, 5, 6 Keys)
-  handleSingleButtonPress(0, "1"); // Switch 'B' Button
-  handleSingleButtonPress(1, "2"); // Switch 'A' Button
-  handleSingleButtonPress(2, "3"); // Switch 'Y' Button
-  handleSingleButtonPress(3, "4"); // Switch 'X' Button
-  handleSingleButtonPress(4, "5"); // Left Bumper (L)
-  handleSingleButtonPress(5, "6"); // Right Bumper (R)
-}
+        // "touchstart" triggers instantly on mobile (avoids 300ms click delay)
+        button.addEventListener("touchstart", (e) => {
+            e.preventDefault(); // Prevents zooming/double-tap quirks
+            dispatchFakeKeyEvent("keydown", keyData);
+        }, { passive: false });
+
+        // "touchend" catches finger lifting off the button
+        button.addEventListener("touchend", (e) => {
+            e.preventDefault();
+            dispatchFakeKeyEvent("keyup", keyData);
+        }, { passive: false });
+
+        // "touchcancel" handles safety reset if an alert pops up or finger slips off screen
+        button.addEventListener("touchcancel", (e) => {
+            e.preventDefault();
+            dispatchFakeKeyEvent("keyup", keyData);
+        }, { passive: false });
+    });
+});
 
 function animateSnake(){
-    simulateKeyboardInputs();
     
     c.clearRect(0, 0, canvas.width, canvas.height);
 
