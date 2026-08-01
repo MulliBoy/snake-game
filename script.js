@@ -4,6 +4,9 @@ canvas.width = 400;
 canvas.height = 400;
 var c = canvas.getContext("2d");
 
+// Move these two lines to the very top of your file
+let gamepadIndex = null;
+let buttonCooldowns = {}; 
 const size = 20;
 var sx = 0;
 var sy = 0;
@@ -380,18 +383,16 @@ function drawMirrorSnake() {
 };
 
 // ============================================================================
-// NINTENDO SWITCH BLUETOOTH GAMEPAD SIMULATOR
+// KEEP THIS CODE AT THE END OF YOUR FILE (Do not make it blank!)
 // ============================================================================
-let gamepadIndex = null;
-let buttonCooldowns = {}; 
 
 window.addEventListener("gamepadconnected", (e) => {
   console.log("Switch Controller Connected:", e.gamepad.id);
-  gamepadIndex = e.gamepad.index;
+  gamepadIndex = e.gamepad.index; // Sets the index when controller wakes up
 });
 
 window.addEventListener("gamepaddisconnected", () => {
-  gamepadIndex = null;
+  gamepadIndex = null; // Resets if controller disconnects
 });
 
 function triggerKeyPress(keyName) {
@@ -419,13 +420,10 @@ function handleSingleButtonPress(buttonIndex, simulatedKey) {
 }
 
 function simulateKeyboardInputs() {
-  // 1. Keep this: Stop if no gamepad index is tracked
   if (gamepadIndex === null) return;
-
   const gamepads = navigator.getGamepads();
   const gp = gamepads[gamepadIndex];
   
-  // 2. FIXED: Stop right here if the gamepad data isn't loaded yet!
   if (!gp || !gp.buttons) return;
 
   // 1. D-Pad Mapping (Directions)
@@ -442,4 +440,3 @@ function simulateKeyboardInputs() {
   handleSingleButtonPress(4, "5"); // Left Bumper (L)
   handleSingleButtonPress(5, "6"); // Right Bumper (R)
 }
-
