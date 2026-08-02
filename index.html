@@ -16,47 +16,47 @@
   <body>
 
     <h1> SNAKE </h1>
+    <!-- Independent Top Button (Cannot affect bottom layout alignment) -->
+<div id="mobile-restart-container">
+    <button id="restart" class="util-btn" onclick="window.location.reload();">🔄 Restart</button>
+</div>
 
     <canvas id = "mycanvas" width="400" height="400"> </canvas>
     <script src="helper.js"></script>
     <script src="script.js"></script>
 
+<!-- Main Layout Wrapper (Reverted exactly to your working bottom code) -->
 <div id="mobile-controller-overlay">
     
-    <!-- Top Row: Completely isolated -->
-    <div class="utility-bar">
-        <button id="restart" class="util-btn" onclick="window.location.reload();">🔄 Restart</button>
-    </div>
-
-    <!-- Bottom Row Wrapper: Forces your control pads to lock to the bottom corners -->
-    <div class="gameplay-controls-row">
-        <!-- Left Side: D-Pad Layout Cluster -->
-        <div class="d-pad-cluster">
-            <div class="dpad-grid">
-                <div class="dpad-empty"></div>
-                <button id="up" class="ctrl-btn dpad-btn">↑</button>
-                <div class="dpad-empty"></div>
-                
-                <button id="left" class="ctrl-btn dpad-btn">←</button>
-                <div class="dpad-center"></div>
-                <button id="right" class="ctrl-btn dpad-btn">→</button>
-                
-                <div class="dpad-empty"></div>
-                <button id="down" class="ctrl-btn dpad-btn">↓</button>
-                <div class="dpad-empty"></div>
-            </div>
-        </div>
-
-        <!-- Right Side: Action Buttons Section (2 Columns of 3) -->
-        <div class="action-cluster">
-            <button id="1" class="ctrl-btn action-btn">1</button>
-            <button id="2" class="ctrl-btn action-btn">2</button>
-            <button id="3" class="ctrl-btn action-btn">3</button>
-            <button id="4" class="ctrl-btn action-btn">4</button>
-            <button id="5" class="ctrl-btn action-btn">5</button>
-            <button id="6" class="ctrl-btn action-btn">6</button>
+    <!-- LEFT SIDE: D-Pad Layout Cluster -->
+    <div class="d-pad-cluster">
+        <div class="dpad-grid">
+            <div class="dpad-empty"></div>
+            <button id="up" class="ctrl-btn dpad-btn">↑</button>
+            <div class="dpad-empty"></div>
+            
+            <button id="left" class="ctrl-btn dpad-btn">←</button>
+            <div class="dpad-center"></div>
+            <button id="right" class="ctrl-btn dpad-btn">→</button>
+            
+            <div class="dpad-empty"></div>
+            <button id="down" class="ctrl-btn dpad-btn">↓</button>
+            <div class="dpad-empty"></div>
         </div>
     </div>
+
+    <!-- RIGHT SIDE: Action Buttons Section (2 Columns of 3) -->
+    <div class="action-cluster">
+        <button id="1" class="ctrl-btn action-btn">1</button>
+        <button id="2" class="ctrl-btn action-btn">2</button>
+        <button id="3" class="ctrl-btn action-btn">3</button>
+        <button id="4" class="ctrl-btn action-btn">4</button>
+        <button id="5" class="ctrl-btn action-btn">5</button>
+        <button id="6" class="ctrl-btn action-btn">6</button>
+    </div>
+
+</div>
+
 
 </div>
 
