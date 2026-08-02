@@ -16,20 +16,27 @@
     <script src="helper.js"></script>
     <script src="script.js"></script>
 
-    <!-- Container for your touch layout -->
+ <!-- Main responsive mobile overlay -->
 <div id="mobile-controller-overlay">
-    <!-- Directional Pad Section -->
+    
+    <!-- Left Side: D-Pad Layout Cluster -->
     <div class="d-pad-cluster">
-        <button id="up" class="ctrl-btn">↑</button>
-        <div class="horizontal-row">
-            <button id="left" class="ctrl-btn">←</button>
-            <div class="spacer"></div>
-            <button id="right" class="ctrl-btn">→</button>
+        <div class="dpad-grid">
+            <div class="dpad-empty"></div>
+            <button id="up" class="ctrl-btn dpad-btn">↑</button>
+            <div class="dpad-empty"></div>
+            
+            <button id="left" class="ctrl-btn dpad-btn">←</button>
+            <div class="dpad-center"></div>
+            <button id="right" class="ctrl-btn dpad-btn">→</button>
+            
+            <div class="dpad-empty"></div>
+            <button id="down" class="ctrl-btn dpad-btn">↓</button>
+            <div class="dpad-empty"></div>
         </div>
-        <button id="down" class="ctrl-btn">↓</button>
     </div>
 
-    <!-- Action Buttons Section -->
+    <!-- Right Side: Action Buttons Section (2 Columns of 3) -->
     <div class="action-cluster">
         <button id="1" class="ctrl-btn action-btn">1</button>
         <button id="2" class="ctrl-btn action-btn">2</button>
@@ -38,7 +45,9 @@
         <button id="5" class="ctrl-btn action-btn">5</button>
         <button id="6" class="ctrl-btn action-btn">6</button>
     </div>
-    </div>
+
+</div>
+
     
   </body>
 </html>
