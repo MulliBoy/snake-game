@@ -11,31 +11,77 @@ body{
   
   
   
+/* Main Layout Wrapper */
 #mobile-controller-overlay {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 0;
     right: 0;
-    z-index: 9999; /* Forces buttons above the Flutter canvas view */
+    z-index: 9999;
     display: flex;
     justify-content: space-between;
-    padding: 0 30px;
-    pointer-events: none; /* Keeps background areas interactive */
+    align-items: flex-end;
+    padding: 0 40px;
+    pointer-events: none; /* Keeps the background gaming area interactive */
+    box-sizing: border-box;
 }
 
+/* Base Style for All Controls Buttons */
 .ctrl-btn {
-    pointer-events: auto; /* Makes only the buttons touch-responsive */
+    pointer-events: auto; /* Makes buttons touch-responsive */
     background: rgba(0, 0, 0, 0.6);
-    color: white;
+    color: #ffffff;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
+    font-size: 22px;
+    font-weight: bold;
+    font-family: sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: background 0.1s ease;
+}
+
+/* Active touch state styling feedback */
+.ctrl-btn:active {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* LEFT SIDE: D-Pad 3x3 Grid */
+.dpad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 60px);
+    grid-template-rows: repeat(3, 60px);
+    gap: 4px;
+}
+.dpad-btn {
     width: 60px;
     height: 60px;
-    font-size: 20px;
-    user-select: none; /* Prevents text highlights on mobile drag */
+    border-radius: 12px; /* Ergonomic rounded square style dpad edges */
+}
+.dpad-center {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
 }
 
-/* Hide layout on desktop monitors */
-@media (min-width: 768px) {
-    #mobile-controller-overlay { display: none; }
+/* RIGHT SIDE: Action Controls 2x3 Grid Layout */
+.action-cluster {
+    display: grid;
+    grid-template-columns: repeat(2, 65px);
+    grid-template-rows: repeat(3, 65px);
+    gap: 12px;
+}
+.action-btn {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%; /* Classic arcade round style action buttons */
+}
+
+/* Desktop Monitor Visual Override Rule */
+@media (min-width: 1024px) {
+    #mobile-controller-overlay { 
+        display: none !important; 
+    }
 }
