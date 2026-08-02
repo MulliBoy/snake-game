@@ -1,29 +1,69 @@
-body{
+body {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     background-color: white; 
-  }
-  
-  
-  
-  
-  
-  
-  
+}
   
 /* Main Layout Wrapper */
 #mobile-controller-overlay {
     position: absolute;
-    bottom: 30px;
+    top: 20px;       /* Attached to top layer zone */
+    bottom: 30px;    /* Anchored to bottom screen safe-zones */
     left: 0;
     right: 0;
     z-index: 9999;
     display: flex;
+    flex-wrap: wrap; /* Allows top bar to stay separate from bottom grids */
     justify-content: space-between;
     align-items: flex-end;
     padding: 0 40px;
     pointer-events: none; /* Keeps the background gaming area interactive */
     box-sizing: border-box;
+}
+
+/* Forces the utility bar to span across the top layer */
+.utility-bar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; /* Places it cleanly in top-right corner */
+    margin-bottom: auto;       /* Pushes D-Pad and Action keys to the bottom */
+    pointer-events: none;
+}
+
+/* Styled as a stretched, ergonomic variation of your action controls */
+.util-btn {
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    
+    /* Matches your gameplay buttons exactly */
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    
+    /* Stretches the round design into a clean horizontal pill */
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 24px; /* Half of height creates perfect rounded pill caps */
+    
+    /* Text layout and spacing adjustments */
+    font-size: 16px;
+    font-weight: bold;
+    font-family: sans-serif;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Clean spacing between icon and text */
+    
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background 0.1s ease, transform 0.1s ease;
+}
+
+/* Active feedback matches your other controls */
+.util-btn:active {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0.95); /* Subtle tactile shrink when tapped */
 }
 
 /* Base Style for All Controls Buttons */
