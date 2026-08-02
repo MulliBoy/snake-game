@@ -125,3 +125,12 @@ body {
         display: none !important; 
     }
 }
+
+/* Securely anchors the action pad and d-pad to the screen bottom corners */
+.gameplay-controls-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    pointer-events: none;
+}
