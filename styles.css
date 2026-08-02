@@ -4,48 +4,32 @@ body {
     background-color: white; 
 }
   
-/* Main Layout Wrapper */
-#mobile-controller-overlay {
+/* ==========================================
+   NEW: ISOLATED RESTART BUTTON STYLING
+   ========================================== */
+#mobile-restart-container {
     position: absolute;
-    top: 20px;       /* Attached to top layer zone */
-    bottom: 30px;    /* Anchored to bottom screen safe-zones */
-    left: 0;
-    right: 0;
+    top: 20px;
+    right: 40px;
     z-index: 9999;
-    display: flex;
-    flex-wrap: wrap; /* Allows top bar to stay separate from bottom grids */
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 0 40px;
-    pointer-events: none; /* Keeps the background gaming area interactive */
-    box-sizing: border-box;
-}
-
-/* Forces the utility bar to span across the top layer */
-.utility-bar {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end; /* Places it cleanly in top-right corner */
-    margin-bottom: auto;       /* Pushes D-Pad and Action keys to the bottom */
     pointer-events: none;
 }
 
-/* Styled as a stretched, ergonomic variation of your action controls */
 .util-btn {
     pointer-events: auto;
     background: rgba(0, 0, 0, 0.6);
     color: #ffffff;
     
-    /* Matches your gameplay buttons exactly */
+    /* Matches your arcade button aesthetics exactly */
     border: 2px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     
-    /* Stretches the round design into a clean horizontal pill */
+    /* Elegant horizontal pill stretching */
     height: 48px;
     padding: 0 24px;
-    border-radius: 24px; /* Half of height creates perfect rounded pill caps */
+    border-radius: 24px;
     
-    /* Text layout and spacing adjustments */
+    /* Text styling mechanics */
     font-size: 16px;
     font-weight: bold;
     font-family: sans-serif;
@@ -53,17 +37,36 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px; /* Clean spacing between icon and text */
+    gap: 8px;
     
     user-select: none;
     -webkit-user-select: none;
     transition: background 0.1s ease, transform 0.1s ease;
 }
 
-/* Active feedback matches your other controls */
 .util-btn:active {
     background: rgba(255, 255, 255, 0.4);
-    transform: scale(0.95); /* Subtle tactile shrink when tapped */
+    transform: scale(0.95);
+}
+
+
+/* ==========================================
+   REVERTED: YOUR ORIGINAL WORKING CONTROLS STYLING
+   ========================================== */
+
+/* Main Layout Wrapper */
+#mobile-controller-overlay {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 40px;
+    pointer-events: none; /* Keeps the background gaming area interactive */
+    box-sizing: border-box;
 }
 
 /* Base Style for All Controls Buttons */
@@ -121,16 +124,7 @@ body {
 
 /* Desktop Monitor Visual Override Rule */
 @media (min-width: 1024px) {
-    #mobile-controller-overlay { 
+    #mobile-controller-overlay, #mobile-restart-container { 
         display: none !important; 
     }
-}
-
-/* Securely anchors the action pad and d-pad to the screen bottom corners */
-.gameplay-controls-row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    pointer-events: none;
 }
